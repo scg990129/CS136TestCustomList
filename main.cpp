@@ -1,83 +1,85 @@
 #include <iostream>
 
 template <typename T>
-class Node {
-public:
-    T data;
-    Node* next;
-
-    Node(const T& data) : data(data), next(nullptr) {}
-};
-
-template <typename T>
-class CustomListIterator {
-public:
-    explicit CustomListIterator(Node<T>* node) : currentNode(node) {}
-
-    CustomListIterator& operator++() {
-        if (currentNode) {
-            currentNode = currentNode->next;
-        }
-        return *this;
-    }
-
-    T& operator*() const {
-        return currentNode->data;
-    }
-
-    bool operator!=(const CustomListIterator& other) const {
-        return currentNode != other.currentNode;
-    }
-
-private:
-    Node<T>* currentNode;
-};
-
-template <typename T>
 class CustomList {
+private:
+    class Node {
+    public:
+        T data;
+        Node* next;
+
+        Node(const T& data) : data(data), next(nullptr) {}
+    };
+
 public:
+    class CustomListIterator {
+    public:
+        explicit CustomListIterator(Node* node) : currentNode(node) {}
+
+        CustomListIterator& operator++() {
+            if (currentNode) {
+                currentNode = currentNode->next;
+            }
+            return *this;
+        }
+
+        T& operator*() const {
+            return currentNode->data;
+        }
+
+        bool operator!=(const CustomListIterator& other) const {
+            return currentNode != other.currentNode;
+        }
+
+    private:
+        Node* currentNode;
+    };
+
     CustomList() : head(nullptr) {}
 
     ~CustomList() {
         // Clean up nodes when the list is destroyed
-        Node<T>* current = head;
+        Node* current = head;
         while (current) {
-            Node<T>* next = current->next;
+            Node* next = current->next;
             delete current;
             current = next;
         }
     }
 
     // Add an element to the front of the list
-    void push_front(const T& value) {
-        Node<T>* newNode = new Node<T>(value);
+    void push(const T& value) {
+        Node* newNode = new Node(value);
         newNode->next = head;
         head = newNode;
     }
 
     // Return an iterator pointing to the beginning of the list
-    CustomListIterator<T> begin() const {
-        return CustomListIterator<T>(head);
+    CustomListIterator begin() const {
+        return CustomListIterator(head);
     }
 
     // Return an iterator pointing to one past the end of the list
-    CustomListIterator<T> end() const {
-        return CustomListIterator<T>(nullptr);
+    CustomListIterator end() const {
+        return CustomListIterator(nullptr);
     }
 
 private:
-    Node<T>* head;
+    Node* head;
 };
 
-int main() {
+int main(const int argc, const char* argv[]){
     CustomList<int> myList;
-    myList.push_front(3);
-    myList.push_front(2);
-    myList.push_front(1);
+    myList.push(3);
+    myList.push(2);
+    myList.push(1);
 
     // Using the custom iterator to traverse the list
-    for (CustomListIterator<int> it = myList.begin(); it != myList.end(); ++it) {
-        std::cout << *it << " ";
+//    for (CustomListIterator<int> it = myList.begin(); it != myList.end(); ++it) {
+//        std::cout << *it << " ";
+//    }
+    for(auto i: myList){
+        std::cout << i << " ";
     }
 
     return 0;
