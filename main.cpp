@@ -1,14 +1,14 @@
 #include <iostream>
 
 template <typename T>
-class CustomList {
+class CustomLinkedList {
 private:
     class Node {
     public:
         T data;
         Node* next;
 
-        Node(const T& data) : data(data), next(nullptr) {}
+        explicit Node(const T& data) : data(data), next(nullptr) {}
     };
 
 public:
@@ -35,9 +35,9 @@ public:
         Node* currentNode;
     };
 
-    CustomList() : head(nullptr) {}
+    CustomLinkedList() : head(nullptr) {}
 
-    ~CustomList() {
+    ~CustomLinkedList() {
         // Clean up nodes when the list is destroyed
         Node* current = head;
         while (current) {
@@ -55,12 +55,12 @@ public:
     }
 
     // Return an iterator pointing to the beginning of the list
-    CustomListIterator begin() const {
+    [[nodiscard]] CustomListIterator begin() const {
         return CustomListIterator(head);
     }
 
     // Return an iterator pointing to one past the end of the list
-    CustomListIterator end() const {
+    [[nodiscard]] CustomListIterator end() const {
         return CustomListIterator(nullptr);
     }
 
@@ -69,7 +69,7 @@ private:
 };
 
 int main(const int argc, const char* argv[]){
-    CustomList<int> myList;
+    CustomLinkedList<int> myList;
     myList.push(3);
     myList.push(2);
     myList.push(1);
